@@ -1,4 +1,4 @@
-module your_module_name
+module lib
 
 go 1.16
 

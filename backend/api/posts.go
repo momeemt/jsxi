@@ -16,7 +16,7 @@ type (
 		UserId      int    `json:"user_id"`
 	}
 
-	Response struct {
+	PostsResponse struct {
 		Posts []Post `json:"posts"`
 	}
 )
@@ -30,13 +30,13 @@ func GetPosts(c echo.Context) error {
 	posts := []Post{}
 	query := gormDB.Model(&Post{})
 	query.Find(&posts)
-	response := new(Response)
+	response := new(PostsResponse)
 	response.Posts = posts
 
 	return c.JSON(http.StatusOK, response)
 }
 
-func PostPosts(c echo.Context) error {
+func PostPost(c echo.Context) error {
 	post := Post{}
 	if err := c.Bind(&post); err != nil {
 		return c.String(http.StatusServiceUnavailable, err.Error())

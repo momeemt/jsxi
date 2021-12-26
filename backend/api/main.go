@@ -41,6 +41,10 @@ func main() {
 	fmt.Println(config)
 	// url := config.AuthCodeURL(os.Getenv("OAUTH_STATE"), oauth2.AccessTypeOffline)
 
+	gormDB, sqlDB, _ := lib.GetDBClient()
+	defer sqlDB.Close()
+	gormDB.AutoMigrate(&Post{})
+
 	e := echo.New()
 	initRouting(e)
 	e.Logger.Fatal(e.Start(":8000"))
@@ -48,24 +52,10 @@ func main() {
 
 func initRouting(e *echo.Echo) {
 	e.GET("/posts", GetPosts)
+	e.POST("/posts", PostPosts)
 	e.GET("/", index)
 }
 
 func index(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello!")
-}
-
-func GetPosts(c echo.Context) error {
-	gormDB, sqlDB, err := lib.GetDBClient()
-	if err != nil {
-		return c.String(http.StatusServiceUnavailable, err.Error())
-	}
-	defer sqlDB.Close()
-	posts := []Post{}
-	query := gormDB.Model(&Post{})
-	query.Find(&posts)
-	response := new(Response)
-	response.Posts = posts
-
-	return c.JSON(http.StatusOK, response)
+	return c.String(http.StatusOK, "Hello!2")
 }

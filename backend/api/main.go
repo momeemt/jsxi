@@ -13,13 +13,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type (
-	User struct {
-		Id   int    `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
-		Name string `json:"name"`
-	}
-)
-
 func GetConnect() *oauth2.Config {
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("OAUTH_CLIENT_ID"),
@@ -52,7 +45,9 @@ func main() {
 
 func initRouting(e *echo.Echo) {
 	e.GET("/posts", GetPosts)
-	e.POST("/posts", PostPosts)
+	e.POST("/posts", PostPost)
+	e.GET("/users", GetUsers)
+	e.POST("/users", PostUser)
 	e.GET("/", index)
 }
 

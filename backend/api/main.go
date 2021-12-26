@@ -12,6 +12,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type User struct {
+	Id   int    `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
+	Name string `json:"name"`
+}
+
+type Post struct {
+	Id          int    `json:"id" gorm:"primary_key;AUTO_INCREMENT"`
+	Name        string `json:"name"`
+	Code        string `json:"code"`
+	Description string `json:"description"`
+	UserId      int    `json:"user_id"`
+}
+
 func getConnect() *oauth2.Config {
 	config := &oauth2.Config{
 		ClientID:     os.Getenv("OAUTH_CLIENT_ID"),

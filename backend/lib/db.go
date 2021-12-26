@@ -26,8 +26,14 @@ func GetDBClient() (*gorm.DB, *sql.DB, error) {
 			Colorful:      true,
 		},
 	)
+	user := os.Getenv("MYSQL_USER")
+	pass := os.Getenv("MYSQL_PASSWORD")
+	host := os.Getenv("MYSQL_HOST")
+	dbname := os.Getenv("MYSQL_DATABASE")
+	connection := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, pass, host, dbname)
+	fmt.Println(connection)
 	gormDB, err := gorm.Open(
-		mysql.Open("root:root@tcp(database:3600)/main?charset=utf8mb4&parseTime=True&loc=Local"),
+		mysql.Open(connection),
 		&gorm.Config{
 			CreateBatchSize: 1000,
 			Logger:          gormLogger,

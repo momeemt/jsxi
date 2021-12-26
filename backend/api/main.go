@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"momeemt/jsxi/lib"
 	"net/http"
 	"os"
 
@@ -55,17 +56,16 @@ func index(c echo.Context) error {
 }
 
 func GetPosts(c echo.Context) error {
-	// _, sqlDB, err := lib.GetDBClient()
-	// if err != nil {
-	// 	return c.String(http.StatusServiceUnavailable, "err")
-	// }
-	// defer sqlDB.Close()
-	// posts := []Post{}
-	// query := gormDB.Model(&Post{})
-	// query.Find(&posts)
-	// response := new(Response)
-	// response.Posts = posts
+	gormDB, sqlDB, err := lib.GetDBClient()
+	if err != nil {
+		return c.String(http.StatusServiceUnavailable, err.Error())
+	}
+	defer sqlDB.Close()
+	posts := []Post{}
+	query := gormDB.Model(&Post{})
+	query.Find(&posts)
+	response := new(Response)
+	response.Posts = posts
 
-	// return c.JSON(http.StatusOK, response)
-	return c.String(http.StatusOK, "Hello!")
+	return c.JSON(http.StatusOK, response)
 }

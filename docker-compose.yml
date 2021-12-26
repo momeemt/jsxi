@@ -10,11 +10,31 @@ services:
     restart: always
     volumes:
       - ./backend:/usr/src/app
+    environment:
+      MYSQL_DATABASE: jsxi_dev
+      MYSQL_HOST: dockerMySQL
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: ""
+    depends_on:
+      - database
 
   database:
+    image: mysql:8.0
+    container_name: dockerMySQL
     build:
       context: ./database
       dockerfile: database.Dockerfile
+    volumes:
+      - ./database/mysql_init:/docker-entrypoint-initdb.d
+      - ./database/conf.d:/etc/mysql/conf.d
+      - ./mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    environment:
+      TZ: Asia/Tokyo
+      BIND-ADDRESS: 0.0.0.0
+      MYSQL_DATABASE: jsxi_dev
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: ""
+      MYSQL_ROOT_PASSWORD: ""
     restart: always
